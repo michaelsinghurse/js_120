@@ -81,6 +81,12 @@ class Board {
   markSquareAt(key, marker) {
     this.squares[key].setMarker(marker);
   }
+  
+  reset() {
+    for (let index = 1; index <= 9; index += 1) {
+      this.squares[index].setMarker(Square.UNUSED_SQUARE);
+    }
+  }
 
   unusedSquares() {
     return Object.keys(this.squares).filter(key => {
@@ -195,21 +201,42 @@ class TTTGame {
 
   play() {
     this.displayWelcomeMessage();
-
     this.board.display();
+    
     while (true) {
-      this.humanMoves();
-      if (this.gameOver()) break;
-
-      this.computerMoves();
-      if (this.gameOver()) break;
-
+      while (true) {
+        this.humanMoves();
+        if (this.gameOver()) break;
+  
+        this.computerMoves();
+        if (this.gameOver()) break;
+  
+        this.board.displayWithClear();
+      }
+  
+      this.board.displayWithClear();
+      this.displayResults();
+      
+      if (!this.playAgain()) break;
+      
+      this.board.reset();
       this.board.displayWithClear();
     }
-
-    this.board.displayWithClear();
-    this.displayResults();
+    
     this.displayGoodbyeMessage();
+  }
+  
+  playAgain() {
+    let choice;
+    
+    console.log('Do you want to play again? (y/n)');
+    while (true) {
+      choice = readline.question();
+      if (choice === 'y' || choice === 'n') break;
+      console.log('Please enter "y" to play again or "n" to exit.');
+    }
+    
+    return choice === 'y';
   }
 
   someoneWon() {
