@@ -81,7 +81,7 @@ class Board {
   markSquareAt(key, marker) {
     this.squares[key].setMarker(marker);
   }
-  
+
   reset() {
     for (let index = 1; index <= Board.NUM_OF_SQUARES; index += 1) {
       this.squares[index].setMarker(Square.UNUSED_SQUARE);
@@ -92,6 +92,32 @@ class Board {
     return Object.keys(this.squares).filter(key => {
       return this.squares[key].isUnused();
     });
+  }
+
+  winningSquare(marker) {
+    for (let idx1 = 0; idx1 < TTTGame.POSSIBLE_WINNING_ROWS.length; idx1 += 1) {
+      let winningRow = TTTGame.POSSIBLE_WINNING_ROWS[idx1];
+      let numOfMarkers = 0;
+      let numOfEmptys = 0;
+      let emptyKey = '';
+
+      for (let idx2 = 0; idx2 < winningRow.length; idx2 += 1) {
+        let square = winningRow[idx2];
+
+        if (this.squares[square].getMarker() === marker) {
+          numOfMarkers += 1;
+        } else if (this.squares[square].getMarker() === Square.UNUSED_SQUARE) {
+          numOfEmptys += 1;
+          emptyKey = square;
+        }
+      }
+
+      if (numOfMarkers === 2 && numOfEmptys === 1) {
+        return emptyKey;
+      }
+    }
+    
+    return null;
   }
 }
 
@@ -127,12 +153,15 @@ class TTTGame {
   }
 
   computerMoves() {
-    let choice;
-    let validChoices = this.board.unusedSquares();
+    let choice = this.board.winningSquare(this.human.getMarker());
 
-    do {
-      choice = (1 + Math.floor(Math.random() * 9)).toString();
-    } while (!validChoices.includes(choice));
+    if (choice === null) {
+      let validChoices = this.board.unusedSquares();
+
+      do {
+        choice = (1 + Math.floor(Math.random() * 9)).toString();
+      } while (!validChoices.includes(choice));
+    }
 
     this.board.markSquareAt(choice, this.computer.getMarker());
   }
@@ -183,20 +212,20 @@ class TTTGame {
       return this.board.countMarkersFor(player, row) === 3;
     });
   }
-  
+
   joinOr(array, delimiter = ', ', conjunction = 'or') {
     if (!Array.isArray(array)) return undefined;
     if (array.length === 1) return array.toString();
-  
+
     let joinedArray = array.join(delimiter);
-    
-    let lastDelimiterIndex = joinedArray.length 
-                           - array[array.length - 1].toString().length 
+
+    let lastDelimiterIndex = joinedArray.length
+                           - array[array.length - 1].toString().length
                            - 2;
-                           
+
     let sliceEndIndex = array.length > 2 ? lastDelimiterIndex + 1
                                            : lastDelimiterIndex;
-                                           
+
     return `${joinedArray.slice(0, sliceEndIndex)} ${conjunction} ` +
       `${array[array.length - 1].toString()}`;
   }
@@ -204,40 +233,40 @@ class TTTGame {
   play() {
     this.displayWelcomeMessage();
     this.board.display();
-    
+
     while (true) {
       while (true) {
         this.humanMoves();
         if (this.gameOver()) break;
-  
+
         this.computerMoves();
         if (this.gameOver()) break;
-  
+
         this.board.displayWithClear();
       }
-  
+
       this.board.displayWithClear();
       this.displayResults();
-      
+
       if (!this.playAgain()) break;
-      
+
       this.board.reset();
       this.board.displayWithClear();
     }
-    
+
     this.displayGoodbyeMessage();
   }
-  
+
   playAgain() {
     let choice;
-    
+
     console.log('Do you want to play again? (y/n)');
     while (true) {
       choice = readline.question();
       if (choice === 'y' || choice === 'n') break;
       console.log('Please enter "y" to play again or "n" to exit.');
     }
-    
+
     return choice === 'y';
   }
 
