@@ -73,6 +73,15 @@ class Board {
     console.log('');
     this.display();
   }
+  
+  isCenterSquareEmpty() {
+    return this.squares[this.getCenterSquareKey()].getMarker() === 
+      Square.UNUSED_SQUARE;
+  }
+  
+  getCenterSquareKey() {
+    return Board.CENTER_SQUARE_KEY;
+  }
 
   isFull() {
     return this.unusedSquares().length === 0;
@@ -122,6 +131,7 @@ class Board {
 }
 
 Board.NUM_OF_SQUARES = 9;
+Board.CENTER_SQUARE_KEY = '5';
 
 class Player {
   constructor(marker) {
@@ -157,6 +167,12 @@ class TTTGame {
     
     if (choice === null) {
       choice = this.board.winningSquare(this.human.getMarker());
+    }
+    
+    if (choice === null) {
+      if (this.board.isCenterSquareEmpty()) {
+        choice = this.board.getCenterSquareKey();
+      }
     }
 
     if (choice === null) {
