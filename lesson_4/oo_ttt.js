@@ -32,7 +32,7 @@ Square.COMPUTER_MARKER = "O";
 class Board {
   constructor() {
     this.squares = {};
-    for (let index = 1; index <= 9; index += 1) {
+    for (let index = 1; index <= Board.NUM_OF_SQUARES; index += 1) {
       this.squares[String(index)] = new Square();
     }
   }
@@ -83,7 +83,7 @@ class Board {
   }
   
   reset() {
-    for (let index = 1; index <= 9; index += 1) {
+    for (let index = 1; index <= Board.NUM_OF_SQUARES; index += 1) {
       this.squares[index].setMarker(Square.UNUSED_SQUARE);
     }
   }
@@ -94,6 +94,8 @@ class Board {
     });
   }
 }
+
+Board.NUM_OF_SQUARES = 9;
 
 class Player {
   constructor(marker) {
