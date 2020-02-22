@@ -73,12 +73,12 @@ class Board {
     console.log('');
     this.display();
   }
-  
+
   isCenterSquareEmpty() {
-    return this.squares[this.getCenterSquareKey()].getMarker() === 
+    return this.squares[this.getCenterSquareKey()].getMarker() ===
       Square.UNUSED_SQUARE;
   }
-  
+
   getCenterSquareKey() {
     return Board.CENTER_SQUARE_KEY;
   }
@@ -89,6 +89,17 @@ class Board {
 
   markSquareAt(key, marker) {
     this.squares[key].setMarker(marker);
+  }
+  
+  randomOpenSquareKey() {
+    let validChoices = this.unusedSquares();
+    let choice; 
+    
+    do {
+      choice = (1 + Math.floor(Math.random() * 9)).toString();
+    } while (!validChoices.includes(choice));
+    
+    return choice;
   }
 
   reset() {
@@ -125,7 +136,7 @@ class Board {
         return emptyKey;
       }
     }
-    
+
     return null;
   }
 }
@@ -164,11 +175,11 @@ class TTTGame {
 
   computerMoves() {
     let choice = this.board.winningSquare(this.computer.getMarker());
-    
+
     if (choice === null) {
       choice = this.board.winningSquare(this.human.getMarker());
     }
-    
+
     if (choice === null) {
       if (this.board.isCenterSquareEmpty()) {
         choice = this.board.getCenterSquareKey();
@@ -176,11 +187,7 @@ class TTTGame {
     }
 
     if (choice === null) {
-      let validChoices = this.board.unusedSquares();
-
-      do {
-        choice = (1 + Math.floor(Math.random() * 9)).toString();
-      } while (!validChoices.includes(choice));
+      choice = this.board.randomOpenSquareKey();
     }
 
     this.board.markSquareAt(choice, this.computer.getMarker());
