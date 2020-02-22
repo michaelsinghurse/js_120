@@ -158,7 +158,7 @@ class TTTGame {
 
     while (true) {
       let validChoices = this.board.unusedSquares();
-      const prompt = `Choose a square: (${validChoices.join(' ')}): `;
+      const prompt = `Choose a square: (${this.joinOr(validChoices)}): `;
       choice = readline.question(prompt);
 
       if (validChoices.includes(choice)) break;
@@ -174,6 +174,23 @@ class TTTGame {
     return TTTGame.POSSIBLE_WINNING_ROWS.some(row => {
       return this.board.countMarkersFor(player, row) === 3;
     });
+  }
+  
+  joinOr(array, delimiter = ', ', conjunction = 'or') {
+    if (!Array.isArray(array)) return undefined;
+    if (array.length === 1) return array.toString();
+  
+    let joinedArray = array.join(delimiter);
+    
+    let lastDelimiterIndex = joinedArray.length 
+                           - array[array.length - 1].toString().length 
+                           - 2;
+                           
+    let sliceEndIndex = array.length > 2 ? lastDelimiterIndex + 1
+                                           : lastDelimiterIndex;
+                                           
+    return `${joinedArray.slice(0, sliceEndIndex)} ${conjunction} ` +
+      `${array[array.length - 1].toString()}`;
   }
 
   play() {
