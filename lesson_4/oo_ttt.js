@@ -153,7 +153,11 @@ class TTTGame {
   }
 
   computerMoves() {
-    let choice = this.board.winningSquare(this.human.getMarker());
+    let choice = this.board.winningSquare(this.computer.getMarker());
+    
+    if (choice === null) {
+      choice = this.board.winningSquare(this.human.getMarker());
+    }
 
     if (choice === null) {
       let validChoices = this.board.unusedSquares();
