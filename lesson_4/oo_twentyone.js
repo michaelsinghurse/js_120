@@ -1,10 +1,20 @@
 // oo_twentyone.js
 
 class Card {
-  constructor() {
-    // STUB
-    // What sort of state does a card need?
-    // Rank? Suit? Points?
+  constructor(suit, rank) {
+    this.suit = suit;
+    this.rank = rank;
+  }
+  
+  points() {
+    if (!Number.isNaN(Number(this.rank))) {
+      return Number(this.rank);
+    } else if (this.rank === 'J' || this.rank === 'Q' || this.rank === 'K') { 
+      return 10;
+    } else if (this.rank === 'A') {
+      // TODO: Not sure if this is best way to handle Aces?
+      return { high: 11, low: 1 };
+    }
   }
 }
 
@@ -145,3 +155,5 @@ class TwentyOneGame {
 let game = new TwentyOneGame();
 game.start();
 
+let card1 = new Card('Clubs', 'J');
+console.log(card1.points());
