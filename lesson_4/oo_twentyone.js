@@ -81,6 +81,10 @@ class Participant {
     return cardString.slice(0, cardString.lastIndexOf(' ') + 1) + 'unknown';
   }
   
+  isBusted() {
+    return this.calculateScore() > 21;
+  }
+  
   joinOr(array, delimiter = ', ', conjunction = 'or') {
     if (array.length === 1) return array.toString();
   
@@ -110,10 +114,6 @@ class Player extends Participant {
     // STUB
   }
 
-  isBusted() {
-    // STUB
-  }
-
   score() {
     // STUB
   }
@@ -135,10 +135,6 @@ class Dealer extends Participant {
   }
   
   hit() {
-    // STUB
-  }
-
-  isBusted() {
     // STUB
   }
   
@@ -192,7 +188,21 @@ class TwentyOneGame {
   }
 
   playerTurn() {
-    // STUB
+    while (true) {
+      console.log('Would you like to hit or stay? (h/s)');
+      let choice = readline.question();
+      
+      while (choice !== 'h' && choice !== 's') {
+        console.log('Please enter "h" to hit or "s" to stay.');
+        choice = readline.question();
+      }
+      
+      if (choice === 's') break;
+      
+      this.player.receiveCard(this.deck.removeOneCard());
+      this.showCards(true);
+      if (this.player.isBusted()) break;
+    }
   }
 
   showCards(hideLastDealer) {
