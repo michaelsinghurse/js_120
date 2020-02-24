@@ -1,5 +1,8 @@
 // oo_twentyone.js
 
+let clear = require('clear');
+let readline = require('readline-sync');
+
 class Card {
   constructor(suit, rank) {
     this.suit = suit;
@@ -43,10 +46,6 @@ Deck.RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
 class Participant {
   constructor() {
-    // STUB
-    // What sort of state does a participant need?
-    // Score? Hand? Amount of money available?
-    // What else goes here? All the redundant behavior from Player and Dealer?
     this.hand = [];
   }
   
@@ -87,9 +86,7 @@ class Participant {
   
     let joinedArray = array.join(delimiter);
     
-    let lastDelimiterIndex = joinedArray.length 
-                           - array[array.length - 1].toString().length 
-                           - 2;
+    let lastDelimiterIndex = joinedArray.lastIndexOf(delimiter);
                            
     let sliceEndIndex = array.length > 2 ? lastDelimiterIndex + 1
                                            : lastDelimiterIndex;
@@ -105,9 +102,6 @@ class Participant {
 
 class Player extends Participant {
   constructor() {
-    // STUB
-    // What sort of state does a player need?
-    // Score? Hand? Amount of money available?
     super();
     this.money = 5;
   }
@@ -193,6 +187,7 @@ class TwentyOneGame {
   }
 
   displayWelcomeMessage() {
+    clear();
     console.log('Welcome to 21!');
   }
 
