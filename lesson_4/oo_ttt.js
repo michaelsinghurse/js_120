@@ -90,15 +90,15 @@ class Board {
   markSquareAt(key, marker) {
     this.squares[key].setMarker(marker);
   }
-  
+
   randomOpenSquareKey() {
     let validChoices = this.unusedSquares();
-    let choice; 
-    
+    let choice;
+
     do {
       choice = (1 + Math.floor(Math.random() * 9)).toString();
     } while (!validChoices.includes(choice));
-    
+
     return choice;
   }
 
@@ -115,29 +115,27 @@ class Board {
   }
 
   winningSquare(marker) {
-    for (let idx1 = 0; idx1 < TTTGame.POSSIBLE_WINNING_ROWS.length; idx1 += 1) {
-      let winningRow = TTTGame.POSSIBLE_WINNING_ROWS[idx1];
-      let numOfMarkers = 0;
-      let numOfEmptys = 0;
-      let emptyKey = '';
+    let winner = null;
 
-      for (let idx2 = 0; idx2 < winningRow.length; idx2 += 1) {
-        let square = winningRow[idx2];
+    for (let idx = 0; idx < TTTGame.POSSIBLE_WINNING_ROWS.length; idx += 1) {
+      let winningRow = TTTGame.POSSIBLE_WINNING_ROWS[idx];
 
-        if (this.squares[square].getMarker() === marker) {
-          numOfMarkers += 1;
-        } else if (this.squares[square].getMarker() === Square.UNUSED_SQUARE) {
-          numOfEmptys += 1;
-          emptyKey = square;
-        }
-      }
-
-      if (numOfMarkers === 2 && numOfEmptys === 1) {
-        return emptyKey;
+      if (
+        winningRow.filter(key => {
+          return this.squares[key].getMarker() === marker;
+        }).length === 2
+        &&
+        winningRow.filter(key => {
+          return this.squares[key].getMarker() === Square.UNUSED_SQUARE;
+        }).length === 1
+        ) {
+          winner = winningRow.find(key => {
+            return this.squares[key].getMarker() === Square.UNUSED_SQUARE;
+          });
       }
     }
 
-    return null;
+    return winner;
   }
 }
 
