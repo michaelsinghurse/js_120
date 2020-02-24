@@ -45,6 +45,11 @@ class Participant {
     // What sort of state does a participant need?
     // Score? Hand? Amount of money available?
     // What else goes here? All the redundant behavior from Player and Dealer?
+    this.hand = [];
+  }
+  
+  receiveCard(card) {
+    this.hand.push(card);
   }
 }
 
@@ -53,13 +58,11 @@ class Player extends Participant {
     // STUB
     // What sort of state does a player need?
     // Score? Hand? Amount of money available?
+    super();
+    this.money = 5;
   }
 
   hit() {
-    // STUB
-  }
-
-  stay() {
     // STUB
   }
 
@@ -68,6 +71,10 @@ class Player extends Participant {
   }
 
   score() {
+    // STUB
+  }
+  
+  stay() {
     // STUB
   }
 }
@@ -76,32 +83,30 @@ class Dealer extends Participant {
   // Very similar to a Player. Do we need this?
 
   constructor() {
-    // STUB
-    // What sort of state does a dealer need?
-    // Score? Hand? Deck of cards?
+    super();
   }
-
+  
+  hide() {
+    // STUB
+  }
+  
   hit() {
-    // STUB
-  }
-
-  stay() {
     // STUB
   }
 
   isBusted() {
     // STUB
   }
+  
+  reveal() {
+    // STUB
+  }
 
   score() {
     // STUB
   }
-
-  hide() {
-    // STUB
-  }
-
-  reveal() {
+  
+  stay() {
     // STUB
   }
 
@@ -113,13 +118,16 @@ class Dealer extends Participant {
 
 class TwentyOneGame {
   constructor() {
-    // STUB
-    // What sort of state does a game need?
-    // A deck? Two participants?
+    this.player = new Player();
+    this.dealer = new Dealer();
+    this.deck = new Deck();
   }
 
   dealCards() {
-    // STUB
+    this.player.receiveCard(this.deck.removeOneCard());
+    this.player.receiveCard(this.deck.removeOneCard());
+    this.dealer.receiveCard(this.deck.removeOneCard());
+    this.dealer.receiveCard(this.deck.removeOneCard());
   }
 
   dealerTurn() {
@@ -161,13 +169,5 @@ class TwentyOneGame {
 let game = new TwentyOneGame();
 game.start();
 
-let deck = new Deck();
-let card = deck.removeOneCard();
-console.log(card);
-console.log(deck.cards.length);
-card = deck.removeOneCard();
-console.log(card);
-console.log(deck.cards.length);
-card = deck.removeOneCard();
-console.log(card);
-console.log(deck.cards.length);
+console.log(game.dealer.hand);
+console.log(game.player.hand);
