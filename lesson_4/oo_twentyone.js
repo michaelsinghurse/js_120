@@ -20,18 +20,24 @@ class Card {
 
 class Deck {
   constructor() {
-    // STUB
-    // What sort of state does a deck need?
-    // 52 cards
-    // What data structure to keep track of cards
-    // - array, object, or something else?
+    this.cards = [];
+    
+    Deck.SUITS.forEach(suit => {
+      Deck.RANKS.forEach(rank => {
+        this.cards.push(new Card(suit, rank));
+      });
+    });
   }
 
-  deal() {
-    // STUB
-    // does the Dealer or the Deck deal?
+  removeOneCard() {
+    let randomIndex = Math.floor(Math.random() * this.cards.length);
+    return this.cards.splice(randomIndex, 1)[0];
   }
 }
+
+Deck.TOTAL_NUM_CARDS = 52;
+Deck.SUITS = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
+Deck.RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
 class Participant {
   constructor() {
@@ -155,5 +161,13 @@ class TwentyOneGame {
 let game = new TwentyOneGame();
 game.start();
 
-let card1 = new Card('Clubs', 'J');
-console.log(card1.points());
+let deck = new Deck();
+let card = deck.removeOneCard();
+console.log(card);
+console.log(deck.cards.length);
+card = deck.removeOneCard();
+console.log(card);
+console.log(deck.cards.length);
+card = deck.removeOneCard();
+console.log(card);
+console.log(deck.cards.length);
