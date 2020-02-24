@@ -36,7 +36,12 @@ class Deck {
 }
 
 Deck.TOTAL_NUM_CARDS = 52;
-Deck.SUITS = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
+Deck.SUITS = [
+  '\u2663',   // Clubs
+  '\u2666',   // Diamonds
+  '\u2665',   // Hearts
+  '\u2660',   // Spades
+];
 Deck.RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
 class Participant {
@@ -46,6 +51,46 @@ class Participant {
     // Score? Hand? Amount of money available?
     // What else goes here? All the redundant behavior from Player and Dealer?
     this.hand = [];
+  }
+  
+  displayCards(hideLast = false) {
+    // hand is an array of Card objects
+    // map to new array with each object changed to string - suit + rank
+    // join elements of the array with comma and 'and' as conjunction
+    // log this string to the console
+    // TODO: Must say Player cards: and Dealer cards:
+    let cardStringArray = this.hand.map(card => card.suit + card.rank);
+    let displayString = this.joinOr(cardStringArray, ', ', 'and');
+    
+    if (hideLast) {
+      displayString = this.hideLastCard(displayString);
+    }
+    console.log(displayString);
+  }
+  
+  displayScore() {
+    // STUB
+    console.log('Score:');
+  }
+  
+  hideLastCard(cardString) {
+    return cardString.slice(0, cardString.lastIndexOf(' ') + 1) + 'unknown';
+  }
+  
+  joinOr(array, delimiter = ', ', conjunction = 'or') {
+    if (array.length === 1) return array.toString();
+  
+    let joinedArray = array.join(delimiter);
+    
+    let lastDelimiterIndex = joinedArray.length 
+                           - array[array.length - 1].toString().length 
+                           - 2;
+                           
+    let sliceEndIndex = array.length > 2 ? lastDelimiterIndex + 1
+                                           : lastDelimiterIndex;
+                                           
+    return `${joinedArray.slice(0, sliceEndIndex)} ${conjunction} ` +
+      `${array[array.length - 1].toString()}`;
   }
   
   receiveCard(card) {
@@ -150,15 +195,25 @@ class TwentyOneGame {
     // STUB
   }
 
-  showCards() {
-    // STUB
+  showCards(hideLastDealer) {
+    console.log('Your hand:');
+    this.player.displayCards();
+    this.player.displayScore();
+    
+    console.log();
+    
+    console.log('Dealer\'s hand:');
+    this.dealer.displayCards(hideLastDealer);
+    if (!hideLastDealer) {
+      this.dealer.displayScore();
+    }
   }
 
   start() {
     // SPIKE
     this.displayWelcomeMessage();
     this.dealCards();
-    this.showCards();
+    this.showCards(true)
     this.playerTurn();
     this.dealerTurn();
     this.displayResult();
@@ -169,5 +224,3 @@ class TwentyOneGame {
 let game = new TwentyOneGame();
 game.start();
 
-console.log(game.dealer.hand);
-console.log(game.player.hand);
