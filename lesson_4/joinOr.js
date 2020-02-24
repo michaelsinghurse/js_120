@@ -6,9 +6,6 @@ function joinOr(array, delimiter = ', ', conjunction = 'or') {
 
   let joinedArray = array.join(delimiter);
   
-  // let lastDelimiterIndex = joinedArray.length 
-  //                       - array[array.length - 1].toString().length 
-  //                       - 2;
   let lastDelimiterIndex = joinedArray.lastIndexOf(delimiter);
                          
   let sliceEndIndex = array.length > 2 ? lastDelimiterIndex + 1
