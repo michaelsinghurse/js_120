@@ -260,15 +260,16 @@ class TTTGame {
     this.board.display();
 
     while (true) {
-      while (true) {
-        this.humanMoves();
-        if (this.gameOver()) break;
+      this.playOneGame();
+      // while (true) {
+      //   this.humanMoves();
+      //   if (this.gameOver()) break;
 
-        this.computerMoves();
-        if (this.gameOver()) break;
+      //   this.computerMoves();
+      //   if (this.gameOver()) break;
 
-        this.board.displayWithClear();
-      }
+      //   this.board.displayWithClear();
+      // }
 
       this.board.displayWithClear();
       this.displayResults();
@@ -293,6 +294,18 @@ class TTTGame {
     }
 
     return choice === 'y';
+  }
+  
+  playOneGame() {
+    while (true) {
+      this.humanMoves();
+      if (this.gameOver()) break;
+
+      this.computerMoves();
+      if (this.gameOver()) break;
+
+      this.board.displayWithClear();
+    }
   }
 
   someoneWon() {
