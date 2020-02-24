@@ -166,6 +166,8 @@ class Computer extends Player {
 
 class TTTGame {
   constructor() {
+    this.humanWinCount = 0;
+    this.computerWinCount = 0;
     this.board = new Board();
     this.human = new Human();
     this.computer = new Computer();
@@ -199,6 +201,15 @@ class TTTGame {
 
   displayGoodbyeMessage() {
     console.log('Thanks for playing Tic Tac Toe! Goodbye!');
+  }
+
+  displayMatchScore() {
+    console.log('++++++++++++++++++++++++++++++++++++');
+    console.log('Match Score:');
+    console.log(` Human ${this.humanWinCount}`);
+    console.log(` Computer ${this.computerWinCount}`);
+    console.log('First player to 3 wins the match!');
+    console.log('++++++++++++++++++++++++++++++++++++');
   }
 
   displayResults() {
@@ -255,24 +266,23 @@ class TTTGame {
       `${array[array.length - 1].toString()}`;
   }
 
+  matchOver() {
+    return this.humanWinCount === 3 || this.computerWinCount === 3;
+  }
+
   play() {
     this.displayWelcomeMessage();
     this.board.display();
 
     while (true) {
       this.playOneGame();
-      // while (true) {
-      //   this.humanMoves();
-      //   if (this.gameOver()) break;
-
-      //   this.computerMoves();
-      //   if (this.gameOver()) break;
-
-      //   this.board.displayWithClear();
-      // }
 
       this.board.displayWithClear();
       this.displayResults();
+
+      this.updateMatchScore();
+      this.displayMatchScore();
+      if (this.matchOver()) break;
 
       if (!this.playAgain()) break;
 
@@ -295,7 +305,7 @@ class TTTGame {
 
     return choice === 'y';
   }
-  
+
   playOneGame() {
     while (true) {
       this.humanMoves();
@@ -310,6 +320,14 @@ class TTTGame {
 
   someoneWon() {
     return this.isWinner(this.human) || this.isWinner(this.computer);
+  }
+
+  updateMatchScore() {
+    if (this.isWinner(this.human)) {
+      this.humanWinCount += 1;
+    } else if (this.isWinner(this.computer)) {
+      this.computerWinCount += 1;
+    }
   }
 }
 
