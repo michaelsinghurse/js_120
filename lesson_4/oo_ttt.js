@@ -168,6 +168,7 @@ class TTTGame {
   constructor() {
     this.humanWinCount = 0;
     this.computerWinCount = 0;
+    this.numOfGames = 0;
     this.board = new Board();
     this.human = new Human();
     this.computer = new Computer();
@@ -307,12 +308,24 @@ class TTTGame {
   }
 
   playOneGame() {
-    while (true) {
-      this.humanMoves();
-      if (this.gameOver()) break;
+    this.numOfGames += 1;
 
-      this.computerMoves();
-      if (this.gameOver()) break;
+    while (true) {
+      if (this.numOfGames % 2 !== 0) {
+        this.humanMoves();
+        if (this.gameOver()) break;
+
+        this.computerMoves();
+        if (this.gameOver()) break;
+      } else {
+        this.computerMoves();
+        if (this.gameOver()) break;
+
+        this.board.displayWithClear();
+
+        this.humanMoves();
+        if (this.gameOver()) break;
+      }
 
       this.board.displayWithClear();
     }
