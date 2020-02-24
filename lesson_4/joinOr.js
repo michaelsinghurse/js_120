@@ -6,9 +6,10 @@ function joinOr(array, delimiter = ', ', conjunction = 'or') {
 
   let joinedArray = array.join(delimiter);
   
-  let lastDelimiterIndex = joinedArray.length 
-                         - array[array.length - 1].toString().length 
-                         - 2;
+  // let lastDelimiterIndex = joinedArray.length 
+  //                       - array[array.length - 1].toString().length 
+  //                       - 2;
+  let lastDelimiterIndex = joinedArray.lastIndexOf(delimiter);
                          
   let sliceEndIndex = array.length > 2 ? lastDelimiterIndex + 1
                                          : lastDelimiterIndex;
@@ -16,3 +17,7 @@ function joinOr(array, delimiter = ', ', conjunction = 'or') {
   return `${joinedArray.slice(0, sliceEndIndex)} ${conjunction} ` +
     `${array[array.length - 1].toString()}`;
 }
+
+console.log(joinOr([1, 2]));
+console.log(joinOr([1, 2, 3]));
+console.log(joinOr([1, 2, 3], '; ', 'and'));
