@@ -62,7 +62,7 @@ class Participant {
       .reduce((sum, val) => sum += val);
   }
   
-  displayCards(hideLast = false) {
+  cardDisplayString(hideLast = false) {
     let cardStringArray = this.hand.map(card => card.suit + card.rank);
     let displayString = this.joinOr(cardStringArray, ', ', 'and');
     
@@ -70,7 +70,7 @@ class Participant {
       displayString = this.hideLastCard(displayString);
     }
     
-    console.log(displayString);
+    return displayString;
   }
   
   displayScore() {
@@ -213,14 +213,12 @@ class TwentyOneGame {
   }
 
   showCards(hideLastDealer) {
-    console.log('Your hand:');
-    this.player.displayCards();
+    console.log(`Your cards: ${this.player.cardDisplayString()}`);
     this.player.displayScore();
     
     console.log();
     
-    console.log('Dealer\'s hand:');
-    this.dealer.displayCards(hideLastDealer);
+    console.log(`Dealer's cards: ${this.dealer.cardDisplayString(hideLastDealer)}`);
     if (!hideLastDealer) {
       this.dealer.displayScore();
     }
@@ -230,9 +228,19 @@ class TwentyOneGame {
     // SPIKE
     this.displayWelcomeMessage();
     this.dealCards();
-    this.showCards(true)
+    this.showCards(true);
     this.playerTurn();
+    if (this.player.isBusted()) {
+      // show final hands - show dealer's unknown card
+      // announce dealers as winner
+      // adjust player's money
+    }
     this.dealerTurn();
+    if (this.dealer.isBusted()) {
+      // show final hands - show dealer's unknown card
+      // announce player as winner
+      // adjust player's money
+    }
     this.displayResult();
     this.displayGoodbyeMessage();
   }
