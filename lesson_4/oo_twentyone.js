@@ -124,10 +124,20 @@ class Player extends Participant {
 }
 
 class Dealer extends Participant {
-  // Very similar to a Player. Do we need this?
-
   constructor() {
     super();
+    this.deck = new Deck();
+  }
+  
+  dealOneCard(person) {
+    person.receiveCard(this.deck.removeOneCard());
+  }
+  
+  dealStartingHands(player) {
+    this.dealOneCard(player);
+    this.dealOneCard(player);
+    this.dealOneCard(this);
+    this.dealOneCard(this);
   }
   
   hide() {
@@ -160,14 +170,11 @@ class TwentyOneGame {
   constructor() {
     this.player = new Player();
     this.dealer = new Dealer();
-    this.deck = new Deck();
+    // this.deck = new Deck();
   }
 
   dealCards() {
-    this.player.receiveCard(this.deck.removeOneCard());
-    this.player.receiveCard(this.deck.removeOneCard());
-    this.dealer.receiveCard(this.deck.removeOneCard());
-    this.dealer.receiveCard(this.deck.removeOneCard());
+    this.dealer.dealStartingHands(this.player);
   }
 
   dealerTurn() {
@@ -199,7 +206,7 @@ class TwentyOneGame {
       
       if (choice === 's') break;
       
-      this.player.receiveCard(this.deck.removeOneCard());
+      this.dealer.dealOneCard(this.player);
       this.showCards(true);
       if (this.player.isBusted()) break;
     }
