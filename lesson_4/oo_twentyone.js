@@ -111,7 +111,7 @@ class TwentyOneGame {
   }
 
   displayGoodbyeMessage() {
-    // STUB
+    console.log('Thanks for playing 21!');
   }
 
   displayResult() {
@@ -119,7 +119,7 @@ class TwentyOneGame {
   }
 
   displayWelcomeMessage() {
-    // STUB
+    console.log('Welcome to 21!');
   }
 
   playerTurn() {
