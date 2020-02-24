@@ -11,9 +11,6 @@ class Card {
       return Number(this.rank);
     } else if (this.rank === 'J' || this.rank === 'Q' || this.rank === 'K') { 
       return 10;
-    } else if (this.rank === 'A') {
-      // TODO: Not sure if this is best way to handle Aces?
-      return { high: 11, low: 1 };
     }
   }
 }
@@ -53,24 +50,32 @@ class Participant {
     this.hand = [];
   }
   
+  calculateScore() {
+    let scoreAcesHigh = this.calculateScoreWithAceValuedAt(11);
+    let scoreAcesLow = this.calculateScoreWithAceValuedAt(1);
+    
+    return scoreAcesHigh <= 21 ? scoreAcesHigh : scoreAcesLow;
+  }
+  
+  calculateScoreWithAceValuedAt(aceValue) {
+    return this.hand
+      .map(card => card.rank === 'A' ? aceValue : card.points())
+      .reduce((sum, val) => sum += val);
+  }
+  
   displayCards(hideLast = false) {
-    // hand is an array of Card objects
-    // map to new array with each object changed to string - suit + rank
-    // join elements of the array with comma and 'and' as conjunction
-    // log this string to the console
-    // TODO: Must say Player cards: and Dealer cards:
     let cardStringArray = this.hand.map(card => card.suit + card.rank);
     let displayString = this.joinOr(cardStringArray, ', ', 'and');
     
     if (hideLast) {
       displayString = this.hideLastCard(displayString);
     }
+    
     console.log(displayString);
   }
   
   displayScore() {
-    // STUB
-    console.log('Score:');
+    console.log('Score: ' + this.calculateScore());
   }
   
   hideLastCard(cardString) {
