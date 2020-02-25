@@ -218,7 +218,9 @@ class TwentyOneGame {
     
     console.log();
     
-    console.log(`Dealer's cards: ${this.dealer.cardDisplayString(hideLastDealer)}`);
+    console.log(
+      `Dealer's cards: ${this.dealer.cardDisplayString(hideLastDealer)}`
+    );
     if (!hideLastDealer) {
       this.dealer.displayScore();
     }
