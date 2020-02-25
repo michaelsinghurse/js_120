@@ -220,10 +220,31 @@ class TwentyOneGame {
   }
   
   declareWinner() {
-    // STUB
-    this.prompt('STUB: The winner is ______');
+    if (this.player.isBusted()) {
+      this.declareWinnerDealer();
+    } else if (this.dealer.isBusted()) {
+      this.declareWinnerPlayer();
+    } else if (this.isPlayersScoreHigher()) {
+      this.declareWinnerPlayer();
+    } else if (this.isDealersScoreHigher()) {
+      this.declareWinnerDealer();
+    } else if (this.isTieScore()) {
+      this.declareWinnerTie();
+    }
   }
-
+  
+  declareWinnerDealer() {
+    this.prompt('The Dealer wins! Congrats, Dealer!');
+  }
+  
+  declareWinnerPlayer() {
+    this.prompt('You won! Congratulations!');
+  }
+  
+  declareWinnerTie() {
+    this.prompt('A tie score! Sorry, there is no winner this time!');
+  }
+  
   displayGoodbyeMessage() {
     this.prompt('Thanks for playing 21!');
   }
@@ -235,6 +256,18 @@ class TwentyOneGame {
   displayWelcomeMessage() {
     clear();
     this.prompt('Welcome to 21!');
+  }
+  
+  isPlayersScoreHigher() {
+    return this.player.calculateScore() > this.dealer.calculateScore();
+  }
+  
+  isDealersScoreHigher() {
+    return this.dealer.calculateScore() > this.player.calculateScore();
+  }
+  
+  isTieScore() {
+    return this.player.calculateScore() === this.dealer.calculateScore();
   }
   
   playAgain() {  
