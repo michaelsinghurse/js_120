@@ -57,7 +57,7 @@ class Participant {
     let scoreAcesHigh = this.calculateScoreWithAceValuedAt(11);
     let scoreAcesLow = this.calculateScoreWithAceValuedAt(1);
 
-    return scoreAcesHigh <= 21 ? scoreAcesHigh : scoreAcesLow;
+    return scoreAcesHigh <= TwentyOneGame.MAXIMUM_SCORE ? scoreAcesHigh : scoreAcesLow;
   }
 
   calculateScoreWithAceValuedAt(aceValue) {
@@ -86,7 +86,7 @@ class Participant {
   }
 
   isBusted() {
-    return this.calculateScore() > 21;
+    return this.calculateScore() > TwentyOneGame.MAXIMUM_SCORE;
   }
 
   joinOr(array, delimiter = ', ', conjunction = 'or') {
@@ -330,6 +330,8 @@ class TwentyOneGame {
     readline.question();
   }
 }
+
+TwentyOneGame.MAXIMUM_SCORE = 21;
 
 let game = new TwentyOneGame();
 game.start();
