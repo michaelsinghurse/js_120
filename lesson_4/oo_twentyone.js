@@ -119,17 +119,20 @@ class Player extends Participant {
   }
 
   isBroke() {
-    return this.money <= 0;
+    return this.money <= Player.MINIMUM_MONEY;
   }
 
   isRich() {
-    return this.money >= 10;
+    return this.money >= Player.MAXIMUM_MONEY;
   }
 
   updateMoney(amount) {
     this.money += amount;
   }
 }
+
+Player.MINIMUM_MONEY = 0;
+Player.MAXIMUM_MONEY = 10;
 
 class Dealer extends Participant {
   dealOneCard(person) {
