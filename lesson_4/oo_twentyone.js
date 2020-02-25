@@ -77,10 +77,6 @@ class Participant {
     this.hand = [];
   }
   
-  displayScore() {
-    console.log('Score: ' + this.calculateScore());
-  }
-  
   hideLastCard(cardString) {
     return cardString.slice(0, cardString.lastIndexOf(' ') + 1) + 'unknown';
   }
@@ -114,9 +110,9 @@ class Player extends Participant {
     this.money = 5;
   }
   
-  displayMoney() {
+  getMoney() {
     // STUB
-    console.log('STUB: You have X dollars');
+    return this.money;
   }
 
   hit() {
@@ -143,7 +139,7 @@ class Player extends Participant {
   
   updateMoney() {
     // STUB
-    console.log('STUB: Updating money...');
+    return;
   }
 }
 
@@ -162,6 +158,10 @@ class Dealer extends Participant {
     this.dealOneCard(player);
     this.dealOneCard(this);
     this.dealOneCard(this);
+  }
+  
+  doYouWantToHit() {
+    return this.calculateScore() < 17;
   }
   
   hide() {
@@ -204,16 +204,28 @@ class TwentyOneGame {
   }
 
   dealerTurn() {
-    // STUB
+    while (true) {
+      let choice = this.dealer.doYouWantToHit();
+      
+      if (!choice) {
+        this.prompt('Dealer stays');
+        break;
+      }
+      
+      this.prompt('Dealer hits');
+      this.dealer.dealOneCard(this.dealer);
+      this.showCards(true);
+      if (this.dealer.isBusted()) break;
+    }
   }
   
   declareWinner() {
     // STUB
-    console.log('STUB: The winner is ______');
+    this.prompt('STUB: The winner is ______');
   }
 
   displayGoodbyeMessage() {
-    console.log('Thanks for playing 21!');
+    this.prompt('Thanks for playing 21!');
   }
 
   displayResult() {
@@ -222,15 +234,15 @@ class TwentyOneGame {
 
   displayWelcomeMessage() {
     clear();
-    console.log('Welcome to 21!');
+    this.prompt('Welcome to 21!');
   }
   
   playAgain() {  
-    console.log('Would you like to play again? (y/n)');
+    this.prompt('Would you like to play again? (y/n)');
     let choice = readline.question();
     
     while (choice !== 'y' && choice !== 'n') {
-      console.log('Please enter "y" to play again or "n" to stop.');
+      this.prompt('Please enter "y" to play again or "n" to stop.');
       choice = readline.question();
     }
     
@@ -239,11 +251,11 @@ class TwentyOneGame {
 
   playerTurn() {
     while (true) {
-      console.log('Would you like to hit or stay? (h/s)');
+      this.prompt('Would you like to hit or stay? (h/s)');
       let choice = readline.question();
       
       while (choice !== 'h' && choice !== 's') {
-        console.log('Please enter "h" to hit or "s" to stay.');
+        this.prompt('Please enter "h" to hit or "s" to stay.');
         choice = readline.question();
       }
       
@@ -265,13 +277,17 @@ class TwentyOneGame {
     this.declareWinner();
     this.showCards(false);
     this.player.updateMoney();
-    this.player.displayMoney();
+    this.prompt(`Player's purse: $${this.player.getMoney()}`);
+  }
+  
+  prompt(message) {
+    console.log(`=> ${message}`);
   }
 
   showCards(hideLastDealer) {
     console.log('+++++++++++++++++++++++++++++++++++++++++++');
     console.log(`Your cards: ${this.player.cardDisplayString()}`);
-    this.player.displayScore();
+    console.log(`Score: ${this.player.calculateScore()}`);
     
     console.log();
     
@@ -279,7 +295,7 @@ class TwentyOneGame {
       `Dealer's cards: ${this.dealer.cardDisplayString(hideLastDealer)}`
     );
     if (!hideLastDealer) {
-      this.dealer.displayScore();
+      console.log(`Score: ${this.dealer.calculateScore()}`);
     }
     console.log('+++++++++++++++++++++++++++++++++++++++++++');
   }
