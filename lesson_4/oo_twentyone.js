@@ -186,7 +186,7 @@ class TwentyOneGame {
 
       this.prompt('Dealer hits');
       this.dealer.dealOneCard(this.dealer);
-      this.showCards(true);
+      this.showCards(false);
       if (this.dealer.isBusted()) break;
     }
   }
