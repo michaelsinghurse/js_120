@@ -171,6 +171,9 @@ class TwentyOneGame {
 
   dealerTurn() {
     while (true) {
+      this.waitForInputToProceed(
+        'Press any key to see the dealer\'s next move');
+      
       let choice = this.dealer.doYouWantToHit();
       
       if (!choice) {
@@ -276,6 +279,7 @@ class TwentyOneGame {
     if (!this.player.isBusted()) {
       this.dealerTurn();
     }
+    this.waitForInputToProceed('Press any key to see the results');
     this.declareWinner();
     this.showCards(false);
     this.cashOutPlayer();
@@ -313,6 +317,11 @@ class TwentyOneGame {
     }
     
     this.displayGoodbyeMessage();
+  }
+  
+  waitForInputToProceed(message) {
+    this.prompt(message);
+    readline.question();
   }
 }
 
