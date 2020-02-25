@@ -1,6 +1,5 @@
 // oo_ttt.js
 
-let clear = require('clear');
 let readline  = require('readline-sync');
 
 class Square {
@@ -68,7 +67,7 @@ class Board {
   }
 
   displayWithClear() {
-    clear();
+    console.clear();
     console.log('');
     console.log('');
     this.display();
@@ -195,7 +194,7 @@ class TTTGame {
   }
 
   displayWelcomeMessage() {
-    clear();
+    console.clear();
     console.log("Welcome to Tic Tac Toe!");
     console.log('');
   }
