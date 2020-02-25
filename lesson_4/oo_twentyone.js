@@ -120,13 +120,11 @@ class Player extends Participant {
   }
   
   isBroke() {
-    // STUB
-    return false;
+    return this.money <= 0;
   }
   
   isRich() {
-    // STUB
-    return false;
+    return this.money >= 10;
   }
 
   score() {
@@ -137,9 +135,8 @@ class Player extends Participant {
     // STUB
   }
   
-  updateMoney() {
-    // STUB
-    return;
+  updateMoney(amount) {
+    this.money += amount;
   }
 }
 
@@ -195,6 +192,14 @@ class TwentyOneGame {
     this.player = new Player();
     this.dealer = new Dealer();
     // this.deck = new Deck();
+  }
+  
+  cashOutPlayer() {
+    if (this.isPlayerTheWinner()) {
+      this.player.updateMoney(1);
+    } else if (this.isPlayerTheLoser()) {
+      this.player.updateMoney(-1);
+    }
   }
 
   dealCards() {
@@ -258,12 +263,22 @@ class TwentyOneGame {
     this.prompt('Welcome to 21!');
   }
   
+  isDealersScoreHigher() {
+    return this.dealer.calculateScore() > this.player.calculateScore();
+  }
+  
   isPlayersScoreHigher() {
     return this.player.calculateScore() > this.dealer.calculateScore();
   }
   
-  isDealersScoreHigher() {
-    return this.dealer.calculateScore() > this.player.calculateScore();
+  isPlayerTheLoser() {
+    return this.player.isBusted() ||
+      (!this.dealer.isBusted() && this.isDealersScoreHigher());
+  }
+  
+  isPlayerTheWinner() {
+    return !this.player.isBusted() && 
+      (this.dealer.isBusted() || this.isPlayersScoreHigher());  
   }
   
   isTieScore() {
@@ -309,7 +324,7 @@ class TwentyOneGame {
     }
     this.declareWinner();
     this.showCards(false);
-    this.player.updateMoney();
+    this.cashOutPlayer();
     this.prompt(`Player's purse: $${this.player.getMoney()}`);
   }
   
