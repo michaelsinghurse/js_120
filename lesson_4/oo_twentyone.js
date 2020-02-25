@@ -73,6 +73,10 @@ class Participant {
     return displayString;
   }
   
+  clearHand() {
+    this.hand = [];
+  }
+  
   displayScore() {
     console.log('Score: ' + this.calculateScore());
   }
@@ -109,9 +113,24 @@ class Player extends Participant {
     super();
     this.money = 5;
   }
+  
+  displayMoney() {
+    // STUB
+    console.log('STUB: You have X dollars');
+  }
 
   hit() {
     // STUB
+  }
+  
+  isBroke() {
+    // STUB
+    return false;
+  }
+  
+  isRich() {
+    // STUB
+    return false;
   }
 
   score() {
@@ -121,12 +140,16 @@ class Player extends Participant {
   stay() {
     // STUB
   }
+  
+  updateMoney() {
+    // STUB
+    console.log('STUB: Updating money...');
+  }
 }
 
 class Dealer extends Participant {
   constructor() {
     super();
-    this.deck = new Deck();
   }
   
   dealOneCard(person) {
@@ -134,6 +157,7 @@ class Dealer extends Participant {
   }
   
   dealStartingHands(player) {
+    this.deck = new Deck();
     this.dealOneCard(player);
     this.dealOneCard(player);
     this.dealOneCard(this);
@@ -174,11 +198,18 @@ class TwentyOneGame {
   }
 
   dealCards() {
+    this.player.clearHand();
+    this.dealer.clearHand();
     this.dealer.dealStartingHands(this.player);
   }
 
   dealerTurn() {
     // STUB
+  }
+  
+  declareWinner() {
+    // STUB
+    console.log('STUB: The winner is ______');
   }
 
   displayGoodbyeMessage() {
@@ -192,6 +223,18 @@ class TwentyOneGame {
   displayWelcomeMessage() {
     clear();
     console.log('Welcome to 21!');
+  }
+  
+  playAgain() {  
+    console.log('Would you like to play again? (y/n)');
+    let choice = readline.question();
+    
+    while (choice !== 'y' && choice !== 'n') {
+      console.log('Please enter "y" to play again or "n" to stop.');
+      choice = readline.question();
+    }
+    
+    return choice === 'y';
   }
 
   playerTurn() {
@@ -211,6 +254,19 @@ class TwentyOneGame {
       if (this.player.isBusted()) break;
     }
   }
+  
+  playOneGame() {
+    this.dealCards();
+    this.showCards(true);
+    this.playerTurn();
+    if (!this.player.isBusted()) {
+      this.dealerTurn();
+    }
+    this.declareWinner();
+    this.showCards(false);
+    this.player.updateMoney();
+    this.player.displayMoney();
+  }
 
   showCards(hideLastDealer) {
     console.log(`Your cards: ${this.player.cardDisplayString()}`);
@@ -227,23 +283,14 @@ class TwentyOneGame {
   }
 
   start() {
-    // SPIKE
     this.displayWelcomeMessage();
-    this.dealCards();
-    this.showCards(true);
-    this.playerTurn();
-    if (this.player.isBusted()) {
-      // show final hands - show dealer's unknown card
-      // announce dealers as winner
-      // adjust player's money
+    
+    while (true) {
+      this.playOneGame();
+      if (this.player.isBroke() || this.player.isRich()) break;
+      if (!this.playAgain()) break;
     }
-    this.dealerTurn();
-    if (this.dealer.isBusted()) {
-      // show final hands - show dealer's unknown card
-      // announce player as winner
-      // adjust player's money
-    }
-    this.displayResult();
+    
     this.displayGoodbyeMessage();
   }
 }
