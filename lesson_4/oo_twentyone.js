@@ -151,9 +151,11 @@ class Dealer extends Participant {
   }
 
   doYouWantToHit() {
-    return this.calculateScore() < 17;
+    return this.calculateScore() < Dealer.MAXIMUM_SCORE_TO_HIT;
   }
 }
+
+Dealer.MAXIMUM_SCORE_TO_HIT = 17;
 
 class TwentyOneGame {
   constructor() {
