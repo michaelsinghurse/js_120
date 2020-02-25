@@ -251,11 +251,11 @@ class TwentyOneGame {
 
   playAgain() {
     this.prompt('Would you like to play again? (y/n)');
-    let choice = readline.question();
+    let choice = readline.question().toLowerCase()[0];
 
     while (choice !== 'y' && choice !== 'n') {
       this.prompt('Please enter "y" to play again or "n" to stop.');
-      choice = readline.question();
+      choice = readline.question().toLowerCase()[0];
     }
 
     return choice === 'y';
@@ -264,11 +264,11 @@ class TwentyOneGame {
   playerTurn() {
     while (true) {
       this.prompt('Would you like to hit or stay? (h/s)');
-      let choice = readline.question();
+      let choice = readline.question().toLowerCase()[0];
 
       while (choice !== 'h' && choice !== 's') {
         this.prompt('Please enter "h" to hit or "s" to stay.');
-        choice = readline.question();
+        choice = readline.question().toLowerCase()[0];
       }
 
       if (choice === 's') break;
