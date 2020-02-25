@@ -1,6 +1,5 @@
 // oo_twentyone.js
 
-let clear = require('clear');
 let readline = require('readline-sync');
 
 class Card {
@@ -223,7 +222,7 @@ class TwentyOneGame {
   }
 
   displayWelcomeMessage() {
-    clear();
+    console.clear();
     this.prompt('Welcome to 21!');
   }
 
@@ -321,7 +320,7 @@ class TwentyOneGame {
       this.playOneGame();
       if (this.player.isBroke() || this.player.isRich()) break;
       if (!this.playAgain()) break;
-      clear();
+      console.clear();
     }
 
     this.displayGoodbyeMessage();
