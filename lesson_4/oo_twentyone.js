@@ -225,13 +225,9 @@ class TwentyOneGame {
   }
   
   declareWinner() {
-    if (this.player.isBusted()) {
-      this.declareWinnerDealer();
-    } else if (this.dealer.isBusted()) {
+    if (this.isPlayerTheWinner()) {
       this.declareWinnerPlayer();
-    } else if (this.isPlayersScoreHigher()) {
-      this.declareWinnerPlayer();
-    } else if (this.isDealersScoreHigher()) {
+    } else if (this.isPlayerTheLoser()) {
       this.declareWinnerDealer();
     } else if (this.isTieScore()) {
       this.declareWinnerTie();
@@ -282,7 +278,8 @@ class TwentyOneGame {
   }
   
   isTieScore() {
-    return this.player.calculateScore() === this.dealer.calculateScore();
+    return !this.player.isBusted() && !this.dealer.isBusted() && 
+      this.player.calculateScore() === this.dealer.calculateScore();
   }
   
   playAgain() {  
