@@ -3,6 +3,10 @@
 let readline  = require('readline-sync');
 
 class Square {
+  static UNUSED_SQUARE = " ";
+  static HUMAN_MARKER = "X";
+  static COMPUTER_MARKER = "O";
+  
   constructor(marker = Square.UNUSED_SQUARE) {
     this.marker = marker;
   }
@@ -24,11 +28,10 @@ class Square {
   }
 }
 
-Square.UNUSED_SQUARE = " ";
-Square.HUMAN_MARKER = "X";
-Square.COMPUTER_MARKER = "O";
-
 class Board {
+  static NUM_OF_SQUARES = 9;
+  static CENTER_SQUARE_KEY = '5';
+  
   constructor() {
     this.squares = {};
     for (let index = 1; index <= Board.NUM_OF_SQUARES; index += 1) {
@@ -138,9 +141,6 @@ class Board {
   }
 }
 
-Board.NUM_OF_SQUARES = 9;
-Board.CENTER_SQUARE_KEY = '5';
-
 class Player {
   constructor(marker) {
     this.marker = marker;
@@ -164,6 +164,17 @@ class Computer extends Player {
 }
 
 class TTTGame {
+  static POSSIBLE_WINNING_ROWS = [
+    [ "1", "2", "3" ],            // top row of board
+    [ "4", "5", "6" ],            // center row of board
+    [ "7", "8", "9" ],            // bottom row of board
+    [ "1", "4", "7" ],            // left column of board
+    [ "2", "5", "8" ],            // middle column of board
+    [ "3", "6", "9" ],            // right column of board
+    [ "1", "5", "9" ],            // diagonal: top-left to bottom-right
+    [ "3", "5", "7" ],            // diagonal: bottom-left to top-right
+  ];
+
   constructor() {
     this.humanWinCount = 0;
     this.computerWinCount = 0;
@@ -342,17 +353,6 @@ class TTTGame {
     }
   }
 }
-
-TTTGame.POSSIBLE_WINNING_ROWS = [
-  [ "1", "2", "3" ],            // top row of board
-  [ "4", "5", "6" ],            // center row of board
-  [ "7", "8", "9" ],            // bottom row of board
-  [ "1", "4", "7" ],            // left column of board
-  [ "2", "5", "8" ],            // middle column of board
-  [ "3", "6", "9" ],            // right column of board
-  [ "1", "5", "9" ],            // diagonal: top-left to bottom-right
-  [ "3", "5", "7" ],            // diagonal: bottom-left to top-right
-];
 
 let game = new TTTGame();
 game.play();
