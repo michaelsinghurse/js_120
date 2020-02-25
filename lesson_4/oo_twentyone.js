@@ -133,6 +133,9 @@ class Player extends Participant {
 
 class Dealer extends Participant {
   dealOneCard(person) {
+    if (this.deck.length === 0) {
+      this.deck = new Deck();
+    }
     person.receiveCard(this.deck.removeOneCard());
   }
 
