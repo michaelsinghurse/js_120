@@ -291,7 +291,7 @@ class TwentyOneGame {
   }
 
   showCards(hideLastDealer) {
-    console.log('+++++++++++++++++++++++++++++++++++++++++++');
+    console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++');
     console.log(`Your cards: ${this.player.cardDisplayString()}`);
     console.log(`Score: ${this.player.calculateScore()}`);
     
@@ -303,7 +303,7 @@ class TwentyOneGame {
     if (!hideLastDealer) {
       console.log(`Score: ${this.dealer.calculateScore()}`);
     }
-    console.log('+++++++++++++++++++++++++++++++++++++++++++');
+    console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++');
   }
 
   start() {
