@@ -111,12 +111,7 @@ class Player extends Participant {
   }
   
   getMoney() {
-    // STUB
     return this.money;
-  }
-
-  hit() {
-    // STUB
   }
   
   isBroke() {
@@ -125,14 +120,6 @@ class Player extends Participant {
   
   isRich() {
     return this.money >= 10;
-  }
-
-  score() {
-    // STUB
-  }
-  
-  stay() {
-    // STUB
   }
   
   updateMoney(amount) {
@@ -160,38 +147,12 @@ class Dealer extends Participant {
   doYouWantToHit() {
     return this.calculateScore() < 17;
   }
-  
-  hide() {
-    // STUB
-  }
-  
-  hit() {
-    // STUB
-  }
-  
-  reveal() {
-    // STUB
-  }
-
-  score() {
-    // STUB
-  }
-  
-  stay() {
-    // STUB
-  }
-
-  deal() {
-    // STUB
-    // does the dealer or the deck deal?
-  }
 }
 
 class TwentyOneGame {
   constructor() {
     this.player = new Player();
     this.dealer = new Dealer();
-    // this.deck = new Deck();
   }
   
   cashOutPlayer() {
@@ -248,10 +209,6 @@ class TwentyOneGame {
   
   displayGoodbyeMessage() {
     this.prompt('Thanks for playing 21!');
-  }
-
-  displayResult() {
-    // STUB
   }
 
   displayWelcomeMessage() {
