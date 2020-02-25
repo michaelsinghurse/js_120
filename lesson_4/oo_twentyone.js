@@ -22,6 +22,16 @@ class Card {
 }
 
 class Deck {
+  static TOTAL_NUM_CARDS = 52;
+  static SUITS = [
+  '\u2663',   // Clubs
+  '\u2666',   // Diamonds
+  '\u2665',   // Hearts
+  '\u2660',   // Spades
+  ];
+  static RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 
+    'A'];
+  
   constructor() {
     this.cards = [];
 
@@ -38,31 +48,9 @@ class Deck {
   }
 }
 
-Deck.TOTAL_NUM_CARDS = 52;
-Deck.SUITS = [
-  '\u2663',   // Clubs
-  '\u2666',   // Diamonds
-  '\u2665',   // Hearts
-  '\u2660',   // Spades
-];
-Deck.RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-
 class Participant {
   constructor() {
     this.hand = [];
-  }
-
-  calculateScore() {
-    let scoreAcesHigh = this.calculateScoreWithAceValuedAt(11);
-    let scoreAcesLow = this.calculateScoreWithAceValuedAt(1);
-
-    return scoreAcesHigh <= TwentyOneGame.MAXIMUM_SCORE ? scoreAcesHigh : scoreAcesLow;
-  }
-
-  calculateScoreWithAceValuedAt(aceValue) {
-    return this.hand
-      .map(card => (card.rank === 'A' ? aceValue : card.points()))
-      .reduce((sum, val) => sum + val);
   }
 
   cardDisplayString(hideLast = false) {
@@ -82,10 +70,6 @@ class Participant {
 
   hideLastCard(cardString) {
     return cardString.slice(0, cardString.lastIndexOf(' ') + 1) + 'unknown';
-  }
-
-  isBusted() {
-    return this.calculateScore() > TwentyOneGame.MAXIMUM_SCORE;
   }
 
   joinOr(array, delimiter = ', ', conjunction = 'or') {
@@ -108,6 +92,9 @@ class Participant {
 }
 
 class Player extends Participant {
+  static MINIMUM_MONEY = 0;
+  static MAXIMUM_MONEY = 10;
+  
   constructor() {
     super();
     this.money = 5;
@@ -130,9 +117,6 @@ class Player extends Participant {
   }
 }
 
-Player.MINIMUM_MONEY = 0;
-Player.MAXIMUM_MONEY = 10;
-
 class Dealer extends Participant {
   dealOneCard(person) {
     if (this.deck.length === 0) {
@@ -148,18 +132,29 @@ class Dealer extends Participant {
     this.dealOneCard(this);
     this.dealOneCard(this);
   }
-
-  doYouWantToHit() {
-    return this.calculateScore() < Dealer.MAXIMUM_SCORE_TO_HIT;
-  }
 }
 
-Dealer.MAXIMUM_SCORE_TO_HIT = 17;
-
 class TwentyOneGame {
+  static DEALER_HIT_CEILING = 17;
+  static MAXIMUM_SCORE = 21;
+  
   constructor() {
     this.player = new Player();
     this.dealer = new Dealer();
+  }
+
+  calculateScore(person) {
+    let scoreAcesHigh = this.calculateScoreWithAceValuedAt(person, 11);
+    let scoreAcesLow = this.calculateScoreWithAceValuedAt(person, 1);
+
+    return scoreAcesHigh <= TwentyOneGame.MAXIMUM_SCORE ?
+      scoreAcesHigh : scoreAcesLow;
+  }
+
+  calculateScoreWithAceValuedAt(person, aceValue) {
+    return person.hand
+      .map(card => (card.rank === 'A' ? aceValue : card.points()))
+      .reduce((sum, val) => sum + val);
   }
 
   cashOutPlayer() {
@@ -181,7 +176,7 @@ class TwentyOneGame {
       this.waitForInputToProceed(
         'Press any key to see the dealer\'s next move');
 
-      let choice = this.dealer.doYouWantToHit();
+      let choice = this.shouldDealerHit();
 
       if (!choice) {
         this.prompt('Dealer stays');
@@ -191,7 +186,7 @@ class TwentyOneGame {
       this.prompt('Dealer hits');
       this.dealer.dealOneCard(this.dealer);
       this.showCards(false);
-      if (this.dealer.isBusted()) break;
+      if (this.isBusted(this.dealer)) break;
     }
   }
 
@@ -226,27 +221,31 @@ class TwentyOneGame {
     this.prompt('Welcome to 21!');
   }
 
+  isBusted(person) {
+    return this.calculateScore(person) > TwentyOneGame.MAXIMUM_SCORE;
+  }
+
   isDealersScoreHigher() {
-    return this.dealer.calculateScore() > this.player.calculateScore();
+    return this.calculateScore(this.dealer) > this.calculateScore(this.player);
   }
 
   isPlayersScoreHigher() {
-    return this.player.calculateScore() > this.dealer.calculateScore();
+    return this.calculateScore(this.player) > this.calculateScore(this.dealer);
   }
 
   isPlayerTheLoser() {
-    return this.player.isBusted() ||
-      (!this.dealer.isBusted() && this.isDealersScoreHigher());
+    return this.isBusted(this.player) ||
+      (!this.isBusted(this.dealer) && this.isDealersScoreHigher());
   }
 
   isPlayerTheWinner() {
-    return !this.player.isBusted() &&
-      (this.dealer.isBusted() || this.isPlayersScoreHigher());
+    return !this.isBusted(this.player) &&
+      (this.isBusted(this.dealer) || this.isPlayersScoreHigher());
   }
 
   isTieScore() {
-    return !this.player.isBusted() && !this.dealer.isBusted() &&
-      this.player.calculateScore() === this.dealer.calculateScore();
+    return !this.isBusted(this.player) && !this.isBusted(this.dealer) &&
+      this.calculateScore(this.player) === this.calculateScore(this.dealer);
   }
 
   playAgain() {
@@ -275,7 +274,7 @@ class TwentyOneGame {
 
       this.dealer.dealOneCard(this.player);
       this.showCards(true);
-      if (this.player.isBusted()) break;
+      if (this.isBusted(this.player)) break;
     }
   }
 
@@ -283,7 +282,7 @@ class TwentyOneGame {
     this.dealCards();
     this.showCards(true);
     this.playerTurn();
-    if (!this.player.isBusted()) {
+    if (!this.isBusted(this.player)) {
       this.dealerTurn();
     }
     this.waitForInputToProceed('Press any key to see the results');
@@ -297,10 +296,14 @@ class TwentyOneGame {
     console.log(`=> ${message}`);
   }
 
+  shouldDealerHit() {
+    return this.calculateScore(this.dealer) < TwentyOneGame.DEALER_HIT_CEILING;
+  }
+
   showCards(hideLastDealer) {
     console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++');
     console.log(`Your cards: ${this.player.cardDisplayString()}`);
-    console.log(`Score: ${this.player.calculateScore()}`);
+    console.log(`Score: ${this.calculateScore(this.player)}`);
 
     console.log();
 
@@ -308,7 +311,7 @@ class TwentyOneGame {
       `Dealer's cards: ${this.dealer.cardDisplayString(hideLastDealer)}`
     );
     if (!hideLastDealer) {
-      console.log(`Score: ${this.dealer.calculateScore()}`);
+      console.log(`Score: ${this.calculateScore(this.dealer)}`);
     }
     console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++');
   }
@@ -331,8 +334,6 @@ class TwentyOneGame {
     readline.question();
   }
 }
-
-TwentyOneGame.MAXIMUM_SCORE = 21;
 
 let game = new TwentyOneGame();
 game.start();
