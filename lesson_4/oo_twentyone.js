@@ -269,6 +269,7 @@ class TwentyOneGame {
   }
 
   showCards(hideLastDealer) {
+    console.log('+++++++++++++++++++++++++++++++++++++++++++');
     console.log(`Your cards: ${this.player.cardDisplayString()}`);
     this.player.displayScore();
     
@@ -280,6 +281,7 @@ class TwentyOneGame {
     if (!hideLastDealer) {
       this.dealer.displayScore();
     }
+    console.log('+++++++++++++++++++++++++++++++++++++++++++');
   }
 
   start() {
@@ -289,6 +291,7 @@ class TwentyOneGame {
       this.playOneGame();
       if (this.player.isBroke() || this.player.isRich()) break;
       if (!this.playAgain()) break;
+      clear();
     }
     
     this.displayGoodbyeMessage();
