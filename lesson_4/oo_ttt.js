@@ -298,7 +298,7 @@ class TTTGame {
 
     console.log('Do you want to play again? (y/n)');
     while (true) {
-      choice = readline.question();
+      choice = readline.question().toLowerCase()[0];
       if (choice === 'y' || choice === 'n') break;
       console.log('Please enter "y" to play again or "n" to exit.');
     }
