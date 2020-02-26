@@ -6,7 +6,7 @@ class Square {
   static UNUSED_SQUARE = " ";
   static HUMAN_MARKER = "X";
   static COMPUTER_MARKER = "O";
-  
+
   constructor(marker = Square.UNUSED_SQUARE) {
     this.marker = marker;
   }
@@ -31,7 +31,7 @@ class Square {
 class Board {
   static NUM_OF_SQUARES = 9;
   static CENTER_SQUARE_KEY = '5';
-  
+
   constructor() {
     this.squares = {};
     for (let index = 1; index <= Board.NUM_OF_SQUARES; index += 1) {
@@ -115,30 +115,6 @@ class Board {
       return this.squares[key].isUnused();
     });
   }
-
-  winningSquare(marker) {
-    let winner = null;
-
-    for (let idx = 0; idx < TTTGame.POSSIBLE_WINNING_ROWS.length; idx += 1) {
-      let winningRow = TTTGame.POSSIBLE_WINNING_ROWS[idx];
-
-      if (
-        winningRow.filter(key => {
-          return this.squares[key].getMarker() === marker;
-        }).length === 2
-        &&
-        winningRow.filter(key => {
-          return this.squares[key].getMarker() === Square.UNUSED_SQUARE;
-        }).length === 1
-        ) {
-          winner = winningRow.find(key => {
-            return this.squares[key].getMarker() === Square.UNUSED_SQUARE;
-          });
-      }
-    }
-
-    return winner;
-  }
 }
 
 class Player {
@@ -185,10 +161,10 @@ class TTTGame {
   }
 
   computerMoves() {
-    let choice = this.board.winningSquare(this.computer.getMarker());
+    let choice = this.winningSquare(this.computer.getMarker());
 
     if (choice === null) {
-      choice = this.board.winningSquare(this.human.getMarker());
+      choice = this.winningSquare(this.human.getMarker());
     }
 
     if (choice === null) {
@@ -351,6 +327,30 @@ class TTTGame {
     } else if (this.isWinner(this.computer)) {
       this.computerWinCount += 1;
     }
+  }
+  
+  winningSquare(marker) {
+    let winner = null;
+
+    for (let idx = 0; idx < TTTGame.POSSIBLE_WINNING_ROWS.length; idx += 1) {
+      let winningRow = TTTGame.POSSIBLE_WINNING_ROWS[idx];
+
+      if (
+        winningRow.filter(key => {
+          return this.board.squares[key].getMarker() === marker;
+        }).length === 2
+        &&
+        winningRow.filter(key => {
+          return this.board.squares[key].getMarker() === Square.UNUSED_SQUARE;
+        }).length === 1
+        ) {
+          winner = winningRow.find(key => {
+            return this.board.squares[key].getMarker() === Square.UNUSED_SQUARE;
+          });
+      }
+    }
+
+    return winner;
   }
 }
 
